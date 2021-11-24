@@ -7,7 +7,6 @@
 
 import UIKit
 import CCGestureLock
-import GoogleMobileAds
 import LocalAuthentication
 
 class ViewController: UIViewController {
@@ -83,19 +82,14 @@ class ViewController: UIViewController {
                             let nxt = self.storyboard?.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
                             self.navigationController?.pushViewController(nxt, animated: true)
                         }
-                        // fingerprint validation was successful
                         print("Fingerprint validated.")
                     } else {
                         // fingerprint validation failed
-                        // get the reason for validation failure
-                     /*   var alert = UIAlertController(title: nil, message: "Fingerprint is not validate.", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                        self.present(alert, animated: true, completion: nil)*/
                         var failureReason = "unable to authenticate user"
                         print("Fingerprint validation failed: \(failureReason).");
                     }
                 })
-            } else {
+            }else {
                 //get more information
                 var reason = "Local Authentication not available"
                 print("Error: Touch ID fingerprint authentication is not available: \(reason)");

@@ -59,7 +59,7 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UITe
             print(snapshot.value!)
             self.DBvalue = snapshot.value as! Int
             if(self.DBvalue == 1){
-                //self.Launchbannerad()
+                self.Launchbannerad()
             }
         }
         LaunchInterstitialAd()

@@ -102,7 +102,7 @@ class HideimgsVC: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             print(snapshot.value!)
             self.DBvalue = snapshot.value as! Int
             if(self.DBvalue == 1){
-             //   self.Launchbannerad()
+                self.Launchbannerad()
             }
         }
     }
