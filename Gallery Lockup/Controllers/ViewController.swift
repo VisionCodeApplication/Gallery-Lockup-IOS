@@ -8,6 +8,7 @@
 import UIKit
 import CCGestureLock
 import GoogleMobileAds
+import LocalAuthentication
 
 class ViewController: UIViewController {
 
@@ -33,18 +34,23 @@ class ViewController: UIViewController {
     var pass = String()
     var passwordset = false
     var tagcount = 1
-
+    var fingerprintpass = Bool()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tagcount = 1
         navigationController?.navigationBar.isHidden = true
-        
         passwordtype()
         let use = UserDefaults.standard
         if use.value(forKey: "torf") != nil {
             passwordset = use.value(forKey: "torf") as! Bool
         }else{
             passwordset = false
+        }
+        if use.value(forKey: "Fingerpass") != nil {
+            fingerprintpass = use.value(forKey: "Fingerpass") as! Bool
+            fingpass()
         }
         setupGestureLock()
         // Do any additional setup after loading the view.
@@ -59,6 +65,42 @@ class ViewController: UIViewController {
         password()
         passwordtype()
         tagcount = 1
+    }
+    
+    func fingpass() {
+        print(fingerprintpass)
+        if fingerprintpass == true {
+            var context = LAContext()
+            var error : NSError?
+            if context.canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error:&error) {
+                // evaluate
+                var reason = "Authenticate for server login"
+                context.evaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason, reply: {
+                    (success, authenticationError) -> Void in
+                    // check whether evaluation of fingerprint was successful
+                    if success {
+                        DispatchQueue.main.async {
+                            let nxt = self.storyboard?.instantiateViewController(withIdentifier: "HomeVC") as! HomeVC
+                            self.navigationController?.pushViewController(nxt, animated: true)
+                        }
+                        // fingerprint validation was successful
+                        print("Fingerprint validated.")
+                    } else {
+                        // fingerprint validation failed
+                        // get the reason for validation failure
+                     /*   var alert = UIAlertController(title: nil, message: "Fingerprint is not validate.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)*/
+                        var failureReason = "unable to authenticate user"
+                        print("Fingerprint validation failed: \(failureReason).");
+                    }
+                })
+            } else {
+                //get more information
+                var reason = "Local Authentication not available"
+                print("Error: Touch ID fingerprint authentication is not available: \(reason)");
+            }
+        }
     }
     
     func passwordtype(){
