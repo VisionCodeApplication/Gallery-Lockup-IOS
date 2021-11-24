@@ -176,7 +176,6 @@ class HideimgsVC: UIViewController, UICollectionViewDelegate, UICollectionViewDa
             options.includeHiddenAssets = true
             photos = PHAsset.fetchAssets(with: options)
             print(photos)
-            print(photos.object(at: 0).isHidden)
         }else{
             let options = PHFetchOptions()
             options.sortDescriptors = [ NSSortDescriptor(key: "creationDate", ascending: true) ]
